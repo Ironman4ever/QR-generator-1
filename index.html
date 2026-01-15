@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free QR Code Generator - Create custom QR codes with logos, patterns, and advanced features.">
+    <title>QRForge – Advanced QR Code Generator</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com;">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-icon">◰</span>
+                <span class="logo-text">QRForge</span>
+            </a>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="single">Single QR</button>
+                <button class="nav-tab" data-tab="bulk">Bulk Generate</button>
+                <button class="nav-tab" data-tab="dynamic">Dynamic QR</button>
+                <button class="nav-tab" data-tab="analytics">Analytics</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Single QR Generator Tab -->
+    <main id="tab-single" class="tab-content active">
+        <div class="container">
+            <div class="generator-header">
+                <h1 class="generator-title">Create Your <span class="gradient-text">QR Code</span></h1>
+                <p class="generator-subtitle">Full customization with patterns, colors, logos, and high-resolution downloads.</p>
+            </div>
+
+            <div class="generator-layout">
+                <!-- Left Panel -->
+                <div class="input-panel">
+                    <!-- QR Type Selector -->
+                    <div class="panel-section">
+                        <h3 class="panel-title">1. Select QR Type</h3>
+                        <div class="qr-type-grid">
+                            <button class="qr-type-btn active" data-type="url">
+                                <span class="type-icon">🔗</span>
+                                <span class="type-name">URL</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="text">
+                                <span class="type-icon">📝</span>
+                                <span class="type-name">Text</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="wifi">
+                                <span class="type-icon">📶</span>
+                                <span class="type-name">WiFi</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="vcard">
+                                <span class="type-icon">👤</span>
+                                <span class="type-name">vCard</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="email">
+                                <span class="type-icon">✉️</span>
+                                <span class="type-name">Email</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="sms">
+                                <span class="type-icon">💬</span>
+                                <span class="type-name">SMS</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="phone">
+                                <span class="type-icon">📞</span>
+                                <span class="type-name">Phone</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="location">
+                                <span class="type-icon">📍</span>
+                                <span class="type-name">Location</span>
+                            </button>
+                            <button class="qr-type-btn" data-type="event">
+                                <span class="type-icon">📅</span>
+                                <span class="type-name">Event</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Input Forms -->
+                    <div class="panel-section">
+                        <h3 class="panel-title">2. Enter Details</h3>
+                        
+                        <!-- URL Form -->
+                        <div id="form-url" class="input-form active">
+                            <div class="form-group">
+                                <label for="url-input">Website URL</label>
+                                <input type="url" id="url-input" placeholder="https://example.com" class="form-input">
+                            </div>
+                        </div>
+
+                        <!-- Text Form -->
+                        <div id="form-text" class="input-form">
+                            <div class="form-group">
+                                <label for="text-input">Your Text</label>
+                                <textarea id="text-input" placeholder="Enter any text message..." class="form-input form-textarea" rows="4"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- WiFi Form -->
+                        <div id="form-wifi" class="input-form">
+                            <div class="form-group">
+                                <label for="wifi-ssid">Network Name (SSID)</label>
+                                <input type="text" id="wifi-ssid" placeholder="Example-WiFi" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="wifi-password">Password</label>
+                                <input type="text" id="wifi-password" placeholder="Enter password" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="wifi-encryption">Encryption</label>
+                                <select id="wifi-encryption" class="form-input">
+                                    <option value="WPA">WPA/WPA2</option>
+                                    <option value="WEP">WEP</option>
+                                    <option value="nopass">None</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- vCard Form -->
+                        <div id="form-vcard" class="input-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="vcard-firstname">First Name</label>
+                                    <input type="text" id="vcard-firstname" placeholder="John" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vcard-lastname">Last Name</label>
+                                    <input type="text" id="vcard-lastname" placeholder="Doe" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="vcard-phone">Phone</label>
+                                <input type="tel" id="vcard-phone" placeholder="+1 234 567 8900" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="vcard-email">Email</label>
+                                <input type="email" id="vcard-email" placeholder="john@example.com" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="vcard-company">Company</label>
+                                <input type="text" id="vcard-company" placeholder="Example Corp" class="form-input">
+                            </div>
+                        </div>
+
+                        <!-- Email Form -->
+                        <div id="form-email" class="input-form">
+                            <div class="form-group">
+                                <label for="email-address">Email Address</label>
+                                <input type="email" id="email-address" placeholder="contact@example.com" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="email-subject">Subject</label>
+                                <input type="text" id="email-subject" placeholder="Inquiry about example.com" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="email-body">Message</label>
+                                <textarea id="email-body" placeholder="Hello team, I saw this on example.com..." class="form-input form-textarea" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- SMS Form -->
+                        <div id="form-sms" class="input-form">
+                            <div class="form-group">
+                                <label for="sms-phone">Phone Number</label>
+                                <input type="tel" id="sms-phone" placeholder="+1 234 567 8900" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="sms-message">Message</label>
+                                <textarea id="sms-message" placeholder="Hi! Message from example.com" class="form-input form-textarea" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Phone Form -->
+                        <div id="form-phone" class="input-form">
+                            <div class="form-group">
+                                <label for="phone-number">Phone Number</label>
+                                <input type="tel" id="phone-number" placeholder="+1 234 567 8900" class="form-input">
+                            </div>
+                        </div>
+
+                        <!-- Location Form -->
+                        <div id="form-location" class="input-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="location-lat">Latitude</label>
+                                    <input type="text" id="location-lat" placeholder="40.7128 (NYC example)" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="location-lng">Longitude</label>
+                                    <input type="text" id="location-lng" placeholder="-74.0060" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="location-query">Or Search Location</label>
+                                <input type="text" id="location-query" placeholder="Example Square, London" class="form-input">
+                            </div>
+                        </div>
+
+                        <!-- Event Form -->
+                        <div id="form-event" class="input-form">
+                            <div class="form-group">
+                                <label for="event-title">Event Title</label>
+                                <input type="text" id="event-title" placeholder="Meeting" class="form-input">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="event-start">Start</label>
+                                    <input type="datetime-local" id="event-start" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="event-end">End</label>
+                                    <input type="datetime-local" id="event-end" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design Customization -->
+                    <div class="panel-section">
+                        <h3 class="panel-title">3. Customize Design</h3>
+                        
+                        <!-- Colors -->
+                        <div class="customize-grid">
+                            <div class="form-group">
+                                <label for="qr-color">QR Color</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="qr-color" value="#000000" class="color-input">
+                                    <span class="color-value">#000000</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg-color">Background</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="bg-color" value="#ffffff" class="color-input">
+                                    <span class="color-value">#ffffff</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gradient Options -->
+                        <div class="form-group" style="margin-top: 12px;">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="gradient-enabled">
+                                <span>Enable Gradient</span>
+                            </label>
+                        </div>
+                        <div id="gradient-options" style="display: none; margin-top: 12px;">
+                            <div class="form-group">
+                                <label>Gradient Type</label>
+                                <div class="style-options" style="grid-template-columns: repeat(4, 1fr);">
+                                    <button class="gradient-btn active" data-gradient-type="linear" title="Diagonal">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="4" y1="20" x2="20" y2="4"/>
+                                        </svg>
+                                        <span>Diagonal</span>
+                                    </button>
+                                    <button class="gradient-btn" data-gradient-type="horizontal" title="Horizontal">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="4" y1="12" x2="20" y2="12"/>
+                                        </svg>
+                                        <span>Horizontal</span>
+                                    </button>
+                                    <button class="gradient-btn" data-gradient-type="vertical" title="Vertical">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="12" y1="4" x2="12" y2="20"/>
+                                        </svg>
+                                        <span>Vertical</span>
+                                    </button>
+                                    <button class="gradient-btn" data-gradient-type="radial" title="Radial">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="8"/>
+                                            <circle cx="12" cy="12" r="4"/>
+                                        </svg>
+                                        <span>Radial</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="customize-grid" style="margin-top: 12px;">
+                                <div class="form-group">
+                                    <label for="gradient-start">Start Color</label>
+                                    <div class="color-input-wrapper">
+                                        <input type="color" id="gradient-start" value="#6366f1" class="color-input">
+                                        <span class="color-value">#6366f1</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gradient-end">End Color</label>
+                                    <div class="color-input-wrapper">
+                                        <input type="color" id="gradient-end" value="#ec4899" class="color-input">
+                                        <span class="color-value">#ec4899</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Pattern Styles -->
+                        <div class="form-group">
+                            <label>Pattern Style</label>
+                            <div class="style-options">
+                                <button class="style-btn active" data-pattern="square" title="Square">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg>
+                                    <span>Square</span>
+                                </button>
+                                <button class="style-btn" data-pattern="dots" title="Dots">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="7" r="3"/><circle cx="7" cy="17" r="3"/><circle cx="17" cy="17" r="3"/></svg>
+                                    <span>Dots</span>
+                                </button>
+                                <button class="style-btn" data-pattern="rounded" title="Rounded">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
+                                    <span>Rounded</span>
+                                </button>
+                                <button class="style-btn" data-pattern="classy" title="Classy">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4L10 7L7 10L4 7L7 4Z"/><path d="M17 4L20 7L17 10L14 7L17 4Z"/><path d="M7 14L10 17L7 20L4 17L7 14Z"/><path d="M17 14L20 17L17 20L14 17L17 14Z"/></svg>
+                                    <span>Classy</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Corner Styles -->
+                        <div class="form-group">
+                            <label>Corner Style</label>
+                            <div class="style-options">
+                                <button class="corner-btn active" data-corner="square" title="Square">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="4" y="4" width="16" height="16"/></svg>
+                                    <span>Square</span>
+                                </button>
+                                <button class="corner-btn" data-corner="rounded" title="Rounded">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="4" y="4" width="16" height="16" rx="4"/></svg>
+                                    <span>Rounded</span>
+                                </button>
+                                <button class="corner-btn" data-corner="dot" title="Dot">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
+                                    <span>Dot</span>
+                                </button>
+                                <button class="corner-btn" data-corner="extra" title="Extra Rounded">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="4" y="4" width="16" height="16" rx="8"/></svg>
+                                    <span>Extra</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Logo Upload -->
+                        <div class="form-group">
+                            <label>Logo / Image (Center)</label>
+                            <div class="logo-upload-area" id="logo-upload-area">
+                                <input type="file" id="logo-input" accept="image/*" hidden>
+                                <div class="upload-placeholder" id="upload-placeholder">
+                                    <span class="upload-icon">📷</span>
+                                    <span>Click or drop image here</span>
+                                </div>
+                                <div class="logo-preview" id="logo-preview" style="display: none;">
+                                    <img id="logo-preview-img" src="" alt="Logo preview">
+                                    <button class="remove-logo-btn" id="remove-logo">✕</button>
+                                </div>
+                            </div>
+                            <div class="logo-controls" id="logo-controls" style="display: none;">
+                                <div class="form-group">
+                                    <label for="logo-size">Logo Size: <span id="logo-size-value">20</span>%</label>
+                                    <input type="range" id="logo-size" min="10" max="40" value="20" class="range-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="logo-padding">Padding: <span id="logo-padding-value">5</span>px</label>
+                                    <input type="range" id="logo-padding" min="0" max="20" value="5" class="range-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Size & Quality -->
+                        <div class="form-group">
+                            <label for="qr-size">Size: <span id="size-value">300</span>px</label>
+                            <input type="range" id="qr-size" min="150" max="500" value="300" class="range-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="error-correction">Error Correction</label>
+                            <select id="error-correction" class="form-input">
+                                <option value="L">Low (7%) - Small file size</option>
+                                <option value="M" selected>Medium (15%) - Balanced</option>
+                                <option value="Q">Quartile (25%) - Better with logo</option>
+                                <option value="H">High (30%) - Best for logos</option>
+                            </select>
+                        </div>
+
+                        <!-- Enterprise Options -->
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="password-protect">
+                                <span>Password protect this QR</span>
+                            </label>
+                        </div>
+                        <div class="form-group" id="password-field" style="display: none;">
+                            <label for="qr-password">Password</label>
+                            <input type="password" id="qr-password" placeholder="Enter password" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="set-expiry">
+                                <span>Set expiration date</span>
+                            </label>
+                        </div>
+                        <div class="form-group" id="expiry-field" style="display: none;">
+                            <label for="qr-expiry">Expires On</label>
+                            <input type="date" id="qr-expiry" class="form-input">
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="btn btn-primary btn-lg btn-block">
+                        <span>Generate QR Code</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Right Panel: Preview & Download -->
+                <div class="preview-panel">
+                    <div class="preview-container">
+                        <div class="preview-badge">
+                            <span class="pulse-dot"></span>
+                            Live Preview
+                        </div>
+                        
+                        <div class="qr-display" id="qr-display">
+                            <div class="qr-placeholder">
+                                <span class="placeholder-icon">◰</span>
+                                <p>Your QR code will appear here</p>
+                            </div>
+                            <canvas id="qr-canvas" style="display: none;"></canvas>
+                        </div>
+
+                        <!-- Download Section -->
+                        <div class="download-section" id="download-section" style="display: none;">
+                            <h4 class="download-title">Download Options</h4>
+                            
+                            <div class="download-size-selector">
+                                <label>Resolution:</label>
+                                <div class="size-options">
+                                    <button class="size-btn active" data-size="500">500px</button>
+                                    <button class="size-btn" data-size="1000">1000px</button>
+                                    <button class="size-btn" data-size="2000">2000px</button>
+                                    <button class="size-btn" data-size="4000">4000px</button>
+                                </div>
+                            </div>
+
+                            <div class="download-grid">
+                                <button id="download-png" class="download-btn">
+                                    <span class="format-icon">🖼️</span>
+                                    <span class="format-name">PNG</span>
+                                    <span class="format-desc">High quality raster</span>
+                                </button>
+                                <button id="download-svg" class="download-btn">
+                                    <span class="format-icon">📐</span>
+                                    <span class="format-name">SVG</span>
+                                    <span class="format-desc">Scalable vector</span>
+                                </button>
+                                <button id="download-pdf" class="download-btn">
+                                    <span class="format-icon">📄</span>
+                                    <span class="format-name">PDF</span>
+                                    <span class="format-desc">Print ready</span>
+                                </button>
+                                <button id="download-eps" class="download-btn">
+                                    <span class="format-icon">🎨</span>
+                                    <span class="format-name">EPS</span>
+                                    <span class="format-desc">Professional</span>
+                                </button>
+                            </div>
+
+                            <button id="copy-btn" class="btn btn-outline btn-block">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                                </svg>
+                                Copy to Clipboard
+                            </button>
+                        </div>
+
+                        <p class="preview-note">Up to 4000×4000px • PNG, SVG, PDF, EPS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bulk Generate Tab -->
+    <main id="tab-bulk" class="tab-content">
+        <div class="container">
+            <div class="generator-header">
+                <h1 class="generator-title">Bulk <span class="gradient-text">QR Generator</span></h1>
+                <p class="generator-subtitle">Create hundreds of unique QR codes at once from a CSV file.</p>
+            </div>
+
+            <div class="bulk-layout">
+                <div class="bulk-panel">
+                    <div class="panel-section">
+                        <h3 class="panel-title">Upload CSV File</h3>
+                        <div class="csv-upload-area" id="csv-upload-area">
+                            <input type="file" id="csv-input" accept=".csv" hidden>
+                            <div class="upload-placeholder" id="csv-placeholder">
+                                <span class="upload-icon">📊</span>
+                                <span>Drop CSV file here or click to upload</span>
+                                <small>Each row = One QR code</small>
+                            </div>
+                        </div>
+                        
+                        <div class="csv-format-info">
+                            <h4>CSV Format:</h4>
+                            <code>name,content,type</code>
+                            <p>Example:</p>
+                            <pre>product1,https://shop.com/p1,url
+product2,https://shop.com/p2,url
+contact,BEGIN:VCARD...,vcard</pre>
+                        </div>
+                    </div>
+
+                    <div class="panel-section">
+                        <h3 class="panel-title">Bulk Settings</h3>
+                        <div class="customize-grid">
+                            <div class="form-group">
+                                <label for="bulk-color">QR Color</label>
+                                <input type="color" id="bulk-color" value="#000000" class="color-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="bulk-bg">Background</label>
+                                <input type="color" id="bulk-bg" value="#ffffff" class="color-input">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="bulk-size">Size</label>
+                            <select id="bulk-size" class="form-input">
+                                <option value="256">256px</option>
+                                <option value="512" selected>512px</option>
+                                <option value="1024">1024px</option>
+                                <option value="2048">2048px</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bulk-format">Output Format</label>
+                            <select id="bulk-format" class="form-input">
+                                <option value="png">PNG Images</option>
+                                <option value="svg">SVG Vectors</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="panel-section" id="csv-preview-section" style="display: none;">
+                        <h3 class="panel-title">Preview (<span id="csv-count">0</span> QR codes)</h3>
+                        <div class="csv-preview" id="csv-preview"></div>
+                    </div>
+
+                    <button id="bulk-generate-btn" class="btn btn-primary btn-lg btn-block" disabled>
+                        <span>Generate & Download ZIP</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Dynamic QR Tab -->
+    <main id="tab-dynamic" class="tab-content">
+        <div class="container">
+            <div class="generator-header">
+                <h1 class="generator-title">Dynamic <span class="gradient-text">QR Codes</span></h1>
+                <p class="generator-subtitle">Create QR codes that you can update anytime without reprinting.</p>
+            </div>
+
+            <div class="feature-showcase">
+                <div class="feature-card-large">
+                    <div class="feature-icon-large">🔄</div>
+                    <h3>How Dynamic QR Works</h3>
+                    <ul class="feature-list">
+                        <li>✓ Create a QR code that points to a redirect URL</li>
+                        <li>✓ Change the destination anytime from your dashboard</li>
+                        <li>✓ No need to reprint physical materials</li>
+                        <li>✓ A/B test different landing pages</li>
+                        <li>✓ Schedule content changes</li>
+                    </ul>
+                    
+                    <div class="dynamic-creation-panel" style="max-width: 500px; margin: 32px auto; text-align: left;">
+                        <div class="form-group">
+                            <label for="dynamic-url">Target Destination URL</label>
+                            <input type="url" id="dynamic-url" placeholder="https://example.com/target-page" class="form-input">
+                            <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Where people will land after scanning.</p>
+                        </div>
+                        <div class="form-group" style="margin-top: 16px;">
+                            <label for="dynamic-name">QR Label (Internal)</label>
+                            <input type="text" id="dynamic-name" placeholder="My Campaign @ example.com" class="form-input">
+                        </div>
+                        <button id="create-dynamic-btn" class="btn btn-primary btn-block btn-lg" style="margin-top: 24px;">
+                            Create trackable Dynamic QR
+                        </button>
+                    </div>
+
+                    <!-- Success State (Hidden initially) -->
+                    <div id="dynamic-success-panel" style="display: none; max-width: 500px; margin: 32px auto;">
+                        <div class="stat-card" style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.3); padding: 32px;">
+                            <div style="font-size: 3rem; margin-bottom: 16px;">🎯</div>
+                            <h3 style="color: #22c55e; margin-bottom: 8px;">Dynamic QR Ready!</h3>
+                            <p style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 24px;">Your trackable short-link has been generated.</p>
+                            
+                            <div class="trackable-link" style="background: var(--color-bg-primary); padding: 16px; border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--color-border);">
+                                <code id="trackable-url" style="font-size: 1.1rem; color: var(--color-accent-1); font-family: monospace;">qrforge.link/loading...</code>
+                            </div>
+
+                            <div class="form-row">
+                                <button class="btn btn-outline" onclick="copyTrackableLink()">Copy Link</button>
+                                <button class="btn btn-primary" onclick="goToDesigner()">Customize Design</button>
+                            </div>
+                            <button class="btn btn-text" onclick="resetDynamicForm()" style="margin-top: 24px; color: var(--color-text-muted); font-size: 0.85rem; border: none; background: none; cursor: pointer;">
+                                ← Create another Dynamic QR
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="info-note">
+                    <strong>🚀 Pro Tip:</strong> You can update the "Target URL" even after the QR is printed. 
+                    Visit the <strong>Analytics</strong> tab to see how many people scanned it.
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Analytics Tab -->
+    <main id="tab-analytics" class="tab-content">
+        <div class="container">
+            <div class="generator-header">
+                <h1 class="generator-title">QR Code <span class="gradient-text">Analytics</span></h1>
+                <p class="generator-subtitle">Track scans, locations, devices, and more.</p>
+            </div>
+
+            <div class="analytics-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-scans">0</span>
+                        <span class="stat-label">Total Scans</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="unique-scans">0</span>
+                        <span class="stat-label">Unique Visitors</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="today-scans">0</span>
+                        <span class="stat-label">Today</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="countries">0</span>
+                        <span class="stat-label">Countries</span>
+                    </div>
+                </div>
+
+                <div class="chart-section">
+                    <div class="chart-card">
+                        <h4>Scans Over Time</h4>
+                        <div class="chart-placeholder">
+                            <div class="demo-chart">
+                                <div class="bar" style="height: 40%"></div>
+                                <div class="bar" style="height: 65%"></div>
+                                <div class="bar" style="height: 50%"></div>
+                                <div class="bar" style="height: 80%"></div>
+                                <div class="bar" style="height: 70%"></div>
+                                <div class="bar" style="height: 90%"></div>
+                                <div class="bar" style="height: 60%"></div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h4>Device Breakdown</h4>
+                        <div class="device-stats">
+                            <div class="device-row">
+                                <span class="device-icon">📱</span>
+                                <span class="device-name">Mobile</span>
+                                <div class="device-bar"><div class="device-fill" style="width: 72%"></div></div>
+                                <span class="device-percent">72%</span>
+                            </div>
+                            <div class="device-row">
+                                <span class="device-icon">💻</span>
+                                <span class="device-name">Desktop</span>
+                                <div class="device-bar"><div class="device-fill" style="width: 20%"></div></div>
+                                <span class="device-percent">20%</span>
+                            </div>
+                            <div class="device-row">
+                                <span class="device-icon">📟</span>
+                                <span class="device-name">Tablet</span>
+                                <div class="device-bar"><div class="device-fill" style="width: 8%"></div></div>
+                                <span class="device-percent">8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-note">
+                    <strong>💡 Note:</strong> Analytics require tracking integration. Create a Dynamic QR code 
+                    to start tracking scans. This demo shows sample data layout.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">◰</span>
+                        <span class="logo-text">QRForge</span>
+                    </a>
+                    <p>Advanced QR Code Generator</p>
+                </div>
+                <p class="footer-copy">&copy; 2026 QRForge</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Scripts -->
+    <script src="js/renderer.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/generator.js"></script>
+    <script src="js/bulk.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

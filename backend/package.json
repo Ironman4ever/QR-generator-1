@@ -1,0 +1,22 @@
+{
+  "name": "qrforge-backend",
+  "version": "1.0.0",
+  "description": "Backend for QRForge dynamic QR codes and analytics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.6.0",
+    "canvas": "^3.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.3",
+    "qrcode": "^1.5.4",
+    "shortid": "^2.2.16",
+    "ua-parser-js": "^1.0.35"
+  }
+}

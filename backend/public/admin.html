@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QRForge Admin Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, system-ui, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        min-height: 100vh;
+      }
+
+      /* Login Page */
+      .login-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+      .login-card {
+        background: #1e293b;
+        padding: 2rem;
+        border-radius: 1rem;
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #334155;
+      }
+      .login-card h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #6366f1;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #94a3b8;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #334155;
+        border-radius: 0.5rem;
+        background: #0f172a;
+        color: white;
+        font-size: 1rem;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: #6366f1;
+      }
+      .btn {
+        width: 100%;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn:hover {
+        opacity: 0.9;
+      }
+      .error {
+        color: #ef4444;
+        text-align: center;
+        margin-top: 1rem;
+        display: none;
+      }
+
+      /* Dashboard */
+      .dashboard {
+        display: none;
+      }
+      .header {
+        background: #1e293b;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #334155;
+      }
+      .header h1 {
+        color: #6366f1;
+        font-size: 1.5rem;
+      }
+      .logout-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ef4444;
+        background: transparent;
+        color: #ef4444;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+      .logout-btn:hover {
+        background: #ef4444;
+        color: white;
+      }
+
+      .content {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: #1e293b;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid #334155;
+      }
+      .stat-card .value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #6366f1;
+      }
+      .stat-card .label {
+        color: #94a3b8;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: #e2e8f0;
+      }
+
+      .table-container {
+        background: #1e293b;
+        border-radius: 0.75rem;
+        border: 1px solid #334155;
+        overflow: hidden;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #334155;
+      }
+      th {
+        background: #0f172a;
+        color: #94a3b8;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+      }
+      td {
+        color: #e2e8f0;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr:hover {
+        background: #0f172a40;
+      }
+
+      .link-url {
+        color: #6366f1;
+        text-decoration: none;
+        max-width: 250px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .delete-btn {
+        padding: 0.4rem 0.8rem;
+        border: 1px solid #ef4444;
+        background: transparent;
+        color: #ef4444;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        font-size: 0.8rem;
+      }
+      .delete-btn:hover {
+        background: #ef4444;
+        color: white;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Page -->
+    <div class="login-page" id="login-page">
+      <div class="login-card">
+        <h1>🔐 Admin Login</h1>
+        <form id="login-form">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="admin" required />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              required
+            />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p class="error" id="login-error">Invalid credentials</p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+      <header class="header">
+        <h1>◰ QRForge Admin</h1>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </header>
+
+      <div class="content">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="value" id="stat-links">0</div>
+            <div class="label">Dynamic Links</div>
+          </div>
+          <div class="stat-card">
+            <div class="value" id="stat-scans">0</div>
+            <div class="label">Total Scans</div>
+          </div>
+        </div>
+
+        <h2 class="section-title">All Dynamic Links</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Target URL</th>
+                <th>Scans</th>
+                <th>Created</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="links-table">
+              <tr>
+                <td colspan="6" class="empty">No links yet</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "";
+      let token = localStorage.getItem("qrforge_token");
+
+      // Check if already logged in
+      if (token) {
+        verifyToken();
+      }
+
+      // Login Form
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            const res = await fetch(`${API_BASE}/api/auth/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              localStorage.setItem("qrforge_token", data.token);
+              token = data.token;
+              showDashboard();
+            } else {
+              document.getElementById("login-error").style.display = "block";
+            }
+          } catch (err) {
+            console.error("Login error:", err);
+          }
+        });
+
+      async function verifyToken() {
+        try {
+          const res = await fetch(`${API_BASE}/api/auth/verify`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (res.ok) {
+            showDashboard();
+          } else {
+            logout();
+          }
+        } catch (err) {
+          logout();
+        }
+      }
+
+      function showDashboard() {
+        document.getElementById("login-page").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadStats();
+        loadLinks();
+      }
+
+      function logout() {
+        localStorage.removeItem("qrforge_token");
+        token = null;
+        document.getElementById("login-page").style.display = "flex";
+        document.getElementById("dashboard").style.display = "none";
+      }
+
+      async function loadStats() {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/stats`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          document.getElementById("stat-links").textContent = data.totalLinks;
+          document.getElementById("stat-scans").textContent = data.totalScans;
+        } catch (err) {
+          console.error("Stats error:", err);
+        }
+      }
+
+      async function loadLinks() {
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/links`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+
+          const tbody = document.getElementById("links-table");
+
+          if (data.links.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="6" class="empty">No links yet</td></tr>';
+            return;
+          }
+
+          tbody.innerHTML = data.links
+            .map(
+              (link) => `
+                    <tr>
+                        <td><code>${link.id}</code></td>
+                        <td>${link.name}</td>
+                        <td><a href="${
+                          link.target_url
+                        }" target="_blank" class="link-url">${
+                link.target_url
+              }</a></td>
+                        <td>${link.scan_count}</td>
+                        <td>${new Date(
+                          link.created_at
+                        ).toLocaleDateString()}</td>
+                        <td><button class="delete-btn" onclick="deleteLink('${
+                          link.id
+                        }')">Delete</button></td>
+                    </tr>
+                `
+            )
+            .join("");
+        } catch (err) {
+          console.error("Links error:", err);
+        }
+      }
+
+      async function deleteLink(id) {
+        if (!confirm("Delete this link? This cannot be undone.")) return;
+
+        try {
+          const res = await fetch(`${API_BASE}/api/admin/links/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (res.ok) {
+            loadLinks();
+            loadStats();
+          }
+        } catch (err) {
+          console.error("Delete error:", err);
+        }
+      }
+    </script>
+  </body>
+</html>
